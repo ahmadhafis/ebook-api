@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreBookRequest;
+use App\Http\Resources\BookResource;
 use App\Models\Book;
 use Illuminate\Http\Request;
 
@@ -14,7 +16,7 @@ class BookController extends Controller
      */
     public function index()
     {
-        //
+        return BookResource::collection(Book::all());
     }
 
     /**
@@ -23,9 +25,10 @@ class BookController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreBookRequest $request)
     {
-        //
+        $book = Book::create($request->validated());
+        return $book;
     }
 
     /**
@@ -36,7 +39,7 @@ class BookController extends Controller
      */
     public function show(Book $book)
     {
-        //
+        return new BookResource ($book);
     }
 
     /**
@@ -46,9 +49,10 @@ class BookController extends Controller
      * @param  \App\Models\Book  $book
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Book $book)
+    public function update(StoreBookRequest $request, Book $book)
     {
-        //
+        $book->update($request->validated());
+        return new BookResource ($book);
     }
 
     /**
@@ -59,6 +63,8 @@ class BookController extends Controller
      */
     public function destroy(Book $book)
     {
-        //
+        $book->delete();
+
+        return 'Data Berhasil di Hapus';
     }
 }
