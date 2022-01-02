@@ -15,7 +15,6 @@ class AuthController extends Controller
         $request->validate([
             'email' => 'required|email',
             'password' => 'required',
-            'device_name' => 'required',
         ]);
 
         $user = User::where('email', $request->email)->first();
@@ -26,7 +25,7 @@ class AuthController extends Controller
             ]);
         }
 
-        return $user->createToken($request->device_name)->plainTextToken;
+        return $user->createToken($request->password)->plainTextToken;
     }
 
     public function register(Request $request){
@@ -34,7 +33,6 @@ class AuthController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|string|max:255|unique:users',
             'password' => 'required','confirmed', Password::defaults(),
-            'device_name' => 'required',
         ]);
 
         $user = User::create([
@@ -43,7 +41,7 @@ class AuthController extends Controller
             'password' => Hash::make($request-> password),
         ]);
 
-        return $user->createToken($request->device_name)->plainTextToken;
+        return $user->createToken($request->password)->plainTextToken;
 
     }
 
